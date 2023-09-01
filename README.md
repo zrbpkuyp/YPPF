@@ -15,9 +15,20 @@
 - [Python 3.10+](https://www.python.org/downloads/)
 - [MySQL 8.0+](https://dev.mysql.com/downloads/mysql/)
 
-> 我们提供了搭建好的 [Docker 开发环境](#启动-docker-容器)，并建议**开发者**使用它。
+> 我们提供了搭建好的 devcontainer 开发环境，并建议初学者使用它。此外，我们也提供了在[本地](#本地环境搭建)进行环境搭建的方法。
 
-### 环境搭建
+### 使用 vscode devcontainer 进行开发
+需要安装 [docker](https://www.docker.com/) 和 vscode devcontainer 插件。如果是 linux 用户，
+需要额外安装 docker compose。
+
+在 vscode 中，使用 devcontainer 打开项目根目录。若 devcontainer 启动正常，可以看到 
+
+~~~
+vscode ➜ /workspace
+~~~
+
+至此，devcontaine 中相当于一个配置好的 python 环境，并且无需自行配置 mysql。
+### 本地环境搭建
 
 1. 安装Python，在项目根目录启动终端
 
@@ -186,34 +197,6 @@ python manage.py runserver ip:port
     未执行迁移或模型变动未检出，请参考[更新和迁移](#更新和迁移)。必要时可以删库重建。
 
 ## 加入我们
-
-### 启动 Docker 容器
-
-It is recommended to run it with [docker](https://www.docker.com/),
-docker-compose and vscode devcontainer.
-
-Within the devcontainer, run the following code to start!
-
-```bash
-bash scripts/default_config.sh
-python3 manage.py makemigrations # Add new app here if necessary
-python3 manage.py migrate
-python3 manage.py fill_devdb
-python3 manage.py runserver
-```
-
-Then, you can access the website from "http://localhost:8000".
-
-Inspect code in *dm/management/fake_records.py* for accounts info.
-
-If you want to test with scheduler job,
-edit the config file and change `use_scheduler` to `true`.
-Then, open a new terminal and start the scheduler:
-
-```bash
-python3 manage.py runscheduler
-```
-
 
 
 ### Contribute
