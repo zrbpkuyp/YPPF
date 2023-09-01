@@ -15,19 +15,19 @@
 - [Python 3.10+](https://www.python.org/downloads/)
 - [MySQL 8.0+](https://dev.mysql.com/downloads/mysql/)
 
-> 我们提供了搭建好的 devcontainer 开发环境，并建议初学者使用它。此外，我们也提供了在[本地](#本地环境搭建)进行环境搭建的方法。
+> 我们提供了搭建好的 [Dev Container 开发环境](#使用-vscode-dev-container-进行开发)，并强烈建议开发者和使用VSCode的初学者使用它。此外，我们也提供了在[本地](#本地环境搭建)进行环境搭建的方法。
 
-### 使用 vscode devcontainer 进行开发
-需要安装 [docker](https://www.docker.com/) 和 vscode devcontainer 插件。如果是 linux 用户，
-需要额外安装 docker compose。
+### 使用 VSCode Dev Container 进行开发
+需要安装 [Docker](https://www.docker.com/) 和 VSCode 的 [devcontainer 扩展](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)。Linux 用户需要额外安装 docker compose。
 
-在 vscode 中，使用 devcontainer 打开项目根目录。若 devcontainer 启动正常，可以看到 
+在 VSCode 中，将主侧栏视图切换至 远程资源管理器-开发容器，打开项目根目录。若 devcontainer 启动正常，可以看到：
 
 ~~~
 vscode ➜ /workspace
 ~~~
 
-至此，devcontaine 中相当于一个配置好的 python 环境，并且无需自行配置 mysql。
+至此，devcontainer 中相当于一个配置好的 Python 环境，并且无需自行配置 MySQL。
+
 ### 本地环境搭建
 
 1. 安装Python，在项目根目录启动终端
@@ -139,7 +139,7 @@ python manage.py runserver 127.0.0.1:80
 python manage.py runserver ip:port
 ```
 
-执行任意一种命令以启动，直到你以`Ctrl-C`退出或关闭终端。启动后，便能通过对应网址访问，访问[http://localhost:8000](http://localhost:8000)试试吧~
+执行任意一种命令以启动，直到你以`Ctrl-C`退出或关闭终端。启动后，便能通过对应网址访问，访问<http://localhost:8000>试试吧~
 
 ### 高级功能
 
@@ -153,7 +153,7 @@ python manage.py runserver ip:port
 
     运行`python manage.py createsuperuser`，根据指示创建管理员账号。
 
-    管理员账号可用于登录后台`/admin`，试着访问[http://localhost:8000/admin](http://localhost:8000/admin)吧。
+    管理员账号可用于登录后台`/admin`，试着访问<http://localhost:8000/admin>吧。
 
 - 交互式执行（Django终端）
 
