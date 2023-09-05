@@ -2,8 +2,11 @@
 Generate fake records. Only used in dev & test.
 """
 
+from datetime import date
+
 from generic.models import User
 from app.models import *
+from semester.models import Semester, SemesterType
 from boot import config
 
 USER_NAME = "1"
@@ -11,7 +14,9 @@ USER_NAME_2 = "2"
 TEACHER_NAME = "10"
 TEACHER_NAME_2 = "11"
 
-ORGANIZATION_USER_NAME = ['hhb', 'wdb']
+ORGANIZATION_USER_NAME = ['zz00001', 'zz00002', 'zz00000']
+ORGANIZATION_ONAME = ['绘画班', '舞蹈班', 'Official']
+
 
 # TODO: Change Settings
 assert config.DEBUG, 'Should not import fake_records in production env.'
@@ -199,41 +204,24 @@ def create_org_tag():
 
 
 def create_org():
-    user, created = User.objects.get_or_create(username=ORGANIZATION_USER_NAME[0])
-    user.utype = User.Type.ORG
-    user.is_newuser = False
-    user.set_password(ORGANIZATION_USER_NAME[0])
-    oname = '绘画班'
-    otype = OrganizationType.objects.get(otype_id=1)
-    tags = OrganizationTag.objects.get(name='兴趣')
-    user.save()
 
-    if created:
-        org = Organization.objects.create(
-            organization_id=user,
-            oname=oname,
-            otype=otype,
-        )
-        org.tags.set([tags])
-        org.save()
+    for uname, oname in zip(ORGANIZATION_USER_NAME, ORGANIZATION_ONAME):
+        user, created = User.objects.get_or_create(username=uname)
+        user.utype = User.Type.ORG
+        user.is_newuser = False
+        user.set_password(uname)
+        otype = OrganizationType.objects.get(otype_id=1)
+        tags = OrganizationTag.objects.get(name='兴趣')
+        user.save()
 
-    user_2, created_2 = User.objects.get_or_create(username=ORGANIZATION_USER_NAME[1])
-    user_2.utype = User.Type.ORG
-    user_2.is_newuser = False
-    oname_2 = '舞蹈班'
-    otype_2 = OrganizationType.objects.get(otype_id=1)
-    tags_2 = OrganizationTag.objects.get(name='兴趣')
-    tags_2_2 = OrganizationTag.objects.get(name='住宿生活')
-    user_2.save()
-
-    if created_2:
-        org_2 = Organization.objects.create(
-            organization_id=user_2,
-            oname=oname_2,
-            otype=otype_2,
-        )
-        org_2.tags.set([tags_2, tags_2_2])
-        org_2.save()
+        if created:
+            org = Organization.objects.create(
+                organization_id=user,
+                oname=oname,
+                otype=otype,
+            )
+            org.tags.set([tags])
+            org.save()
 
 
 def create_position():
@@ -309,6 +297,38 @@ def create_activity():
 def create_participant():
     ...
 
+    
+def create_semester():
+    spring_type = SemesterType.objects.create(ty_name = "春季学期")
+    autumn_type = SemesterType.objects.create(ty_name = "秋季学期")
+    
+    #By default, spring semester is 2.1-6.30, autumn semester is 9.1-1.31
+    #For summer vacation, the current semester object falls back to last semester, i.e. spring semester
+    today = date.today()
+    spring_start = date(today.year, 2, 1)
+    if spring_start <= today <= date(today.year, 8, 31):
+        #current semester is spring semester
+        Semester.objects.bulk_create(
+            [
+                Semester(year=today.year, ty=spring_type,
+                         start_date=spring_start, end_date=date(today.year, 6, 30)),
+                Semester(year=today.year, ty=autumn_type,
+                         start_date=date(today.year, 9, 1), end_date=date(today.year+1, 1, 31))
+            ]
+        )
+    else:
+        #current semester is autumn semester
+        #if today.date is before 2.1, then semester's year is today.year-1
+        cur_year = today.year if today.month >= 9 else today.year - 1
+        Semester.objects.bulk_create(
+            [
+                Semester(year=cur_year, ty=autumn_type,
+                         start_date=date(cur_year, 9, 1), end_date=date(cur_year+1, 1, 31)),
+                Semester(year=cur_year+1, ty=spring_type,
+                         start_date=date(cur_year+1, 2, 1), end_date=date(cur_year+1, 6, 30))
+            ]
+        )
+
 
 def create_all():
     # TODO: Add more
@@ -325,6 +345,9 @@ def create_all():
     create_org()
     create_position()
 
+    # semester
+    create_semester()
+    
 
 
 

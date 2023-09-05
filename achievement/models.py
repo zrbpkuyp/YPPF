@@ -1,8 +1,7 @@
 from django.db import models
 
-from utils.models.descriptor import debug_only
+from utils.models.descriptor import admin_only
 from generic.models import User
-from app.utils_dependency import *
 
 __all__ = ['AchievementType', 'Achievement', 'AchievementUnlock']
 
@@ -12,6 +11,10 @@ class AchievementType(models.Model):
     description = models.TextField()
     badge = models.ImageField(upload_to='achievement/images/badges')
     avatar = models.ImageField(upload_to='achievement/images/avatars')
+
+    @admin_only
+    def __str__(self):
+        return self.title
 
     # Actual types in use (remove later)
     # UNDEFINED = (0, "未定义")
@@ -37,7 +40,7 @@ class Achievement(models.Model):
 
     reward_points = models.PositiveIntegerField(default=0)
 
-    @debug_only
+    @admin_only
     def __str__(self):
         return self.name
 
@@ -48,6 +51,6 @@ class AchievementUnlock(models.Model):
     time = models.DateTimeField("解锁时间", auto_now_add=True)
     private = models.BooleanField(default=False)
 
-    @debug_only
-    def __str__(self):
-        return f"{self.user.username} unlocked {self.achievement.name}"
+    class Meta:
+        # XXX: 工具函数的并行安全性完全依赖于此约束
+        unique_together = ['user', 'achievement']
