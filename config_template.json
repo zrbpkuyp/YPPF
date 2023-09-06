@@ -52,6 +52,7 @@
         "token": {
             "display": "$TOKEN$"
         },
+        "base_url": "http://localhost:8000/underground",
         "semester_data": {
             "semester_start": "2023-02-20"
         }

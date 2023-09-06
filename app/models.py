@@ -1771,6 +1771,10 @@ class Prize(models.Model):
     def __str__(self):
         return self.name
 
+    @invalid_for_frontend
+    def __str__(self):
+        return self.name
+
 
 class Pool(models.Model):
     class Meta:
